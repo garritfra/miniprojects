@@ -1,8 +1,21 @@
 use std::io::{self, Write};
 
 fn main() {
+    loop {
+        let input = promt();
+        if let Some(input) = input {
+            match input.as_str().trim() {
+                "quit" => exit(),
+                _ => println!("Cannot evaluate input"),
+            }
+        }
+    }
+}
+
+fn promt() -> Option<String> {
     let mut outstr = io::stdout();
-    outstr.write_all(b"> ").ok().expect("Cannot write to stdout");
+    outstr.write(b"> ").ok().expect("Cannot write to stdout");
+
     outstr.flush().ok().expect("Could not flush stdout");
 
     let mut input = String::new();
@@ -12,5 +25,14 @@ fn main() {
         .ok()
         .expect("Couldn't read line");
 
-    println!("{}", input);
+    if !input.is_empty() {
+        Some(input)
+    } else {
+        None
+    }
+}
+
+fn exit() {
+    println!("Exiting");
+    std::process::exit(0);
 }
